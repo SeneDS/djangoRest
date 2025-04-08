@@ -12,6 +12,6 @@ def api_view(request):
     query = (Product.objects.all()).order_by("?").first() ##order_by("?") permet de renvoyer les données de façon aleatoire
     data = {}
     if query:
-        data = model_to_dict(query)
+        data = model_to_dict(query, fields=[ "name", "price", "description"])
      #ça c'est ce qu'on appelle la serialisation. Il s'agit de mettre des données sous forme de dictionnaire
     return JsonResponse(data)
