@@ -24,3 +24,8 @@ urlpatterns = [
     path('ecom/', include('ecom_api.urls')),
     path('product/', include('product.urls')),
 ]
+
+
+#Root :
+# http://127.0.0.1:8001/ecom/
+# http://127.0.0.1:8001/product/

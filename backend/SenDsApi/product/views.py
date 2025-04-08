@@ -3,6 +3,8 @@ from tkinter.font import names
 from django.http import JsonResponse
 from django.template.defaultfilters import first
 from .models import Product
+from django.forms.models import model_to_dict
+
 
 # Create your views here.
 def api_view(request):
@@ -10,7 +12,6 @@ def api_view(request):
     query = (Product.objects.all()).order_by("?").first() ##order_by("?") permet de renvoyer les données de façon aleatoire
     data = {}
     if query:
-     data["name"]= query.name
-     data["content"] = query.content
-     data["price"] = query.price
+        data = model_to_dict(query)
+     #ça c'est ce qu'on appelle la serialisation. Il s'agit de mettre des données sous forme de dictionnaire
     return JsonResponse(data)
