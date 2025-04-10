@@ -1,17 +1,47 @@
-from tkinter.font import names
 
-from django.http import JsonResponse
-from django.template.defaultfilters import first
+
+from rest_framework import status
 from .models import Product
-from django.forms.models import model_to_dict
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .serializers import ProductSerializer
 
 
-# Create your views here.
+
+
+
+@api_view(['POST'])
 def api_view(request):
- # ce request est different de ce requests. Le premier c'est une instance de la classe httP et l'autre c'est une luvraurie qui nous permet de construire des clients.
-    query = (Product.objects.all()).order_by("?").first() ##order_by("?") permet de renvoyer les données de façon aleatoire
+
+    #if request.method != 'POST':
+        #return Response({'detail': 'method get not allowed'}, status=405)
+    # Ce request est une instance de la classe HTTP
+    #query = Product.objects.all().order_by("?").first()  # Renvoie les données de façon aléatoire
+    serializer = ProductSerializer (data = request.data)
+    if   serializer.is_valid(raise_exception=True):
+        #ici je save les données dans notre database
+        serializer.save()
+        return Response (serializer.data)
+    else:
+        return Response ({"detail": "invalide data"})
+
+
+
+"""
+@api_view(['GET'])
+def api_view(request):
+
+    #if request.method != 'POST':
+        #return Response({'detail': 'method get not allowed'}, status=405)
+    # Ce request est une instance de la classe HTTP
+    query = Product.objects.all().order_by("?").first()  # Renvoie les données de façon aléatoire
     data = {}
     if query:
-        data = model_to_dict(query, fields=[ "name", "price", "description"])
-     #ça c'est ce qu'on appelle la serialisation. Il s'agit de mettre des données sous forme de dictionnaire
-    return JsonResponse(data)
+        #data = model_to_dict(query, fields=["name", "price", "description"])
+        # Sérialisation sous forme de dictionnaire
+        data =ProductSerializer(query).data
+    return Response(data)
+    """
+
+
+## Databricks et airflow

@@ -1,0 +1,3 @@
+### Test de l'API produit
+GET http://127.0.0.1:8001/product/
+Accept: application/json
