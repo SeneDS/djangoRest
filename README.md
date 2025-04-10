@@ -104,7 +104,7 @@ def api_view(request):
     query = (Product.objects.all()).order_by("?").first() ##order_by("?") permet de renvoyer les données de façon aleatoire
     data = {}
     if query:
-        data = model_to_dict(query) 
+          data = model_to_dict(query, fields=[ "name", "price", "description"])#on peut ne pas spécifier ça: , fields=[ "name", "price", "description"]
      #ça c'est ce qu'on appelle la serialisation. Il s'agit de mettre des données sous forme de dictionnaire
     return JsonResponse(data)
 ```
@@ -126,3 +126,40 @@ Puis refferencer l'url dans le fichier urls principal du projet:SenDsApi/urls.py
 ```
 ##Les limite de django pour les api
 si on fait un ctrl et on clique sur JsonResponse. On voit qu'il herite de httpresponse alors que ce dernier ne renvoie rien d'autre que du html. 
+
+## Django REST Serializers et Model API Partie 8
+on cree le fichier forms.py et le fichier serializer.py. Le serializer c'est comme le model en django
+
+
+ jusqu'ici nous avons codé nos propres vues. Dans ce qui suit nous verrons comment utiliser les vues génériques. 
+
+
+## Les vues génériques
+cela permet de créer des vues avec du moindre code. En utilisant les classes base view un autre developpeur poura les comprendre facilement.
+
+CRUD: create, retreave, update, delate
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Sources:
+https://medium.com/p/1d2de182954b
+https://medium.com/p/1d2de182954b

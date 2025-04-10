@@ -1,0 +1,17 @@
+import requests
+
+endpoint = "http://127.0.0.1:8001/product/1/update/"
+
+payload = {
+    "name": "farine",
+    "content": "farine de mil",
+    "price": 5  # 👈 nombre complexe
+}
+
+# Vérification avant d'envoyer
+if isinstance(payload["price"], complex):
+    print("❌ Erreur : le champ 'price' ne doit pas être un nombre complexe.")
+else:
+    responses = requests.put(endpoint, json=payload)
+    print("✅ Statut:", responses.status_code)
+    print("📦 Réponse:", responses.json())
