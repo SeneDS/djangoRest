@@ -1,10 +1,10 @@
 import requests
 
-endpoint = "http://127.0.0.1:8001/product/1/update/"
+endpoint = "http://127.0.0.1:8001/product/15/update/"
 
 payload = {
     "name": "farine",
-    "content": "farine de mil",
+    "content": "",
     "price": 5  # 👈 nombre complexe
 }
 

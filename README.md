@@ -139,14 +139,78 @@ cela permet de créer des vues avec du moindre code. En utilisant les classes ba
 
 CRUD: create, retreave, update, delate
 
+### On peut travailler sur les permissions maintenant afin que n'importe qui ne puisse faire n'importe quoi.
+Il y'a plusieurs types d'authentaification. Il faut juste l'intoduire dquelques lignes de codes dans la classe consernée.
+
+Imports
+```python
+from rest_framework import generics, mixins,  authentication, permissions
+```
+#### 1.1. authentification par session (django views permission)
+Exemple de code 
+```python
+class ListCreateAPIView (generics.ListCreateAPIView ):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+    authentication_classes = [authentication.SessionAuthentication]
+    permission_classes = [ permissions.IsAuthenticatedOrReadOnly]
+    #Là on remplit le champ content par le nom du produit si content n'est pas renseigné
+    def perform_create(self, serializer):
+        name = serializer.validated_data.get('name')
+        content = serializer.validated_data.get('content')or None
+        if content is None:
+            content = name
+        serializer.save(content=content)
+```
+on peut avoir aussi:
+En plus de SessionAuthentication, il y'a BasicAuthentication, TokenAuthentication, 
+Pour les permissions il y'a IsAdminUser, IsAuthenticatedOrReadOnly, RemoteUserAuthentication
+#### 1.1. django model permission
+on crerer un superuser avec 
+python3 manage.py createsuperuser
+
+puis on se connect à admin, on cree un secon utilisateur, on cree un groupe avec des permission, on l'ajoute au groupe et on lui donne des permissions spécifiques. On le fait également staff member.
+Ces authorisations sont accès sur le modele et pas sur la vue. En effet, s'ajit de determiner qui peut voir les données d'un modele,qui peut en rajouter, en modifier ou en supprimer.
+```python
+#Code de remplacement dans la vue
 
 
 
+class ListCreateAPIView (generics.ListCreateAPIView ):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
 
+    authentication_classes = [authentication.SessionAuthentication]
+    permission_classes = [permissions.DjangoModelPermissions]
+    #Là on remplit le champ content par le nom du produit si content n'est pas renseigné
+    def perform_create(self, serializer):
+        name = serializer.validated_data.get('name')
+        content = serializer.validated_data.get('content')or None
+        if content is None:
+            content = name
+        serializer.save(content=content)
+```
+Pour que les données s'enregistre dans la session admin il nous faut mettre ces lignes de codes dans admin.py
+```python
+from django.contrib import admin
+from .models import Product
+admin.site.register(Product)
+```
+ et rajouter celles-ci dans models.py pour afficher les noms des champs:
+```python
+    def __str__(self):
+        return self.name
+```
+La limite de django modele permission c'est qu'on peut donner à une personne que la permission ce qui lui donne l'accès en lecture de toutes les données de la table en question. Tout le monde peut voir les produits par exemple.
 
+#### Les permissions personnalisées, la surcharge du DjangoModelPermissions.
+nb: avec DjangoModelPermissions, un utilisateur peut ne pas avoir acces à la lecture des données depuis admin mais il peut en avoir acces depuis le endpoint: http://127.0.0.1:8001/product/create-list/ par exemple.
 
+Ains on va creer un fichier permission.py dans le dossier product.
 
-
+####Token authentication
+jusqu'ici nous avons utilisé la SessionAuthentication maintenant, nous utiliserons le tokenAuthentication. 
 
 
 

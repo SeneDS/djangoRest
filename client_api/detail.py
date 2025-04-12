@@ -1,7 +1,7 @@
 
 import requests
 
-endpoint = "http://127.0.0.1:8001/product/1/"
+endpoint = "http://127.0.0.1:8001/product/5/"
 
 
 responses = requests.get(endpoint)

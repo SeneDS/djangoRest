@@ -24,6 +24,16 @@ SECRET_KEY = 'django-insecure-5#%*ezq)j9by%^xk=jc-fef*1+simbg0zar%q1+h5v3rhato!9
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+
+
 
 ALLOWED_HOSTS = []
 
@@ -37,10 +47,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-     'rest_framework',
+    'rest_framework',
     'product',
     'ecom_api',
+    'rest_framework.authtoken',
 ]
+
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
